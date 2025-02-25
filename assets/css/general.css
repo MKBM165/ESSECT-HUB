@@ -1,6 +1,7 @@
 body {
   padding: 0;
   margin: 0;
+  background-image: url(/assets/photos/dotted\ bg.png);
 }
 header {
   margin: 18rem;
