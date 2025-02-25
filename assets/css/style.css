@@ -1,35 +1,9 @@
-body {
-  padding: 0;
-  margin: 0;
-  background-image: url(/assets/photos/dotted\ bg.png);
-}
 header {
-  margin: 18rem;
+  margin: 12rem;
 }
 footer {
   padding: 10rem;
 }
 #clubs {
   padding-bottom: 10rem;
-}
-.glass-card {
-  backdrop-filter: blur(15px);
-  border-radius: 20px;
-  padding: 3rem;
-  box-shadow: 0 10px 16px rgba(0, 0, 0, 0.1);
-}
-.form-control,
-.btn {
-  border-radius: 10px;
-}
-.form-control:focus {
-  box-shadow: none;
-  border-color: #0d6efd;
-}
-a {
-  color: #000;
-}
-a:hover {
-  text-decoration: underline;
-  color: #333;
 }
