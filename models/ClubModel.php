@@ -8,11 +8,17 @@ class ClubModel{
     $this->conn=$conn;
   }
 
+//fonctions to improve the strcucture of the code by minimizing reusibility
+private function result_query($query){
+  return $this->conn->query($query);
+}
+
+
   // ************************************************************ --  GETTERS  --***************************************************************************//
 
+
   public function get_club_name($club_id){
-    $query="SELECT nom FROM club where club_id=$club_id";
-    $result=$this->conn->query($query);
+    $result=$this->result_query("SELECT nom FROM club where club_id=$club_id");
 
     if ($result && $row = $result->fetch_assoc()) {
       return $row['nom'];
@@ -21,8 +27,7 @@ class ClubModel{
   }
 
   public function get_club_username($club_id){
-    $query="SELECT username FROM club where club_id=$club_id";
-    $result=$this->conn->query($query);
+    $result=$this->result_query("SELECT username FROM club where club_id=$club_id");
 
     if ($result && $row = $result->fetch_assoc()) {
       return $row['username'];
@@ -31,8 +36,8 @@ class ClubModel{
   }
 
  public function get_club_password($club_id){
-  $query="SELECT password FROM club WHERE club_id=$club_id";
-  $result=$this->conn->query($query);
+  $result=$this->result_query("SELECT password FROM club WHERE club_id=$club_id");
+
   if ($result && $row = $result->fetch_assoc()) {
     return $row['password'];
   }
@@ -40,8 +45,7 @@ class ClubModel{
  }
 
  public function get_club_id($username){
-  $query="SELECT club_id FROM club WHERE username='$username'";
-  $result=$this->conn->query($query);
+  $result=$this->result_query("SELECT club_id FROM club WHERE username='$username'");
 
   if ($result && $row = $result->fetch_assoc()) {
     return $row['club_id'];
@@ -50,8 +54,7 @@ class ClubModel{
  }
 
  public function get_club_desc($club_id) {
-  $query = "SELECT club_desc FROM club WHERE club_id = $club_id";
-  $result = $this->conn->query($query);
+  $result=$this->result_query("SELECT club_desc FROM club WHERE club_id = $club_id");
 
   if ($result && $row = $result->fetch_assoc()) {
     return $row['club_desc']; 
@@ -60,8 +63,7 @@ class ClubModel{
 }
 
 public function get_club_img($club_id){
-  $query = "SELECT club_image FROM club WHERE club_id = $club_id";
-  $result = $this->conn->query($query);
+  $result=$this->result_query("SELECT club_image FROM club WHERE club_id = $club_id");
 
   if ($result && $row = $result->fetch_assoc()) {
     return $row['club_image']; //a url of the image witch is stored in the database 
@@ -70,8 +72,8 @@ public function get_club_img($club_id){
 }
 
 public function get_club_email($club_id){
-  $query = "SELECT email FROM club WHERE club_id = $club_id";
-  $result = $this->conn->query($query);
+  $result=$this->result_query("SELECT email FROM club WHERE club_id = $club_id");
+
   if ($result && $row = $result->fetch_assoc()) {
     return $row['email']; 
   }
@@ -79,8 +81,7 @@ public function get_club_email($club_id){
 }
 
 public function get_club_date($club_id){
- $query = "SELECT date_creation FROM club  WHERE club_id=$club_id";
- $result=$this->conn->query($query);
+  $result=$this->result_query( "SELECT date_creation FROM club  WHERE club_id=$club_id");
 
  if($result && $row=$result->fetch_assoc()){
   $date = new DateTime($row['date_creation']);
