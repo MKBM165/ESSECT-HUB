@@ -1,0 +1,45 @@
+/* Aside styles */
+#userAside {
+  width: 300px;
+  height: 100vh;
+  background-color: rgba(255, 255, 255, 0);
+  backdrop-filter: blur(15px);
+  position: fixed;
+  top: 0;
+  left: -300px;
+  transition: all 0.3s ease;
+  z-index: 1050;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+}
+
+#userAside.show {
+  left: 0;
+}
+.profile-pic {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid white;
+}
+.badge-custom {
+  background-color: #0d6efd;
+  border-radius: 12px;
+  padding: 0.3rem 0.7rem;
+  font-size: 0.8rem;
+}
+.club-item {
+  padding: 0.8rem;
+  border-radius: 10px;
+  transition: background-color 0.3s;
+  cursor: pointer;
+}
+.club-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+.club-item-link {
+  display: inline-block;
+  width: 100%;
+  text-decoration: none;
+  color: black;
+}

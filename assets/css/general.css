@@ -3,3 +3,9 @@ body {
   margin: 0;
   background-image: url(/assets/photos/dotted\ bg.png);
 }
+footer {
+  padding: 10rem;
+}
+#clubs {
+  padding-bottom: 10rem;
+}
