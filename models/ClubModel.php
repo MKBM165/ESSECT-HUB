@@ -91,7 +91,7 @@ public function get_club_date($club_id){
 }
 
   // ************************************************************ --  AUTHENTIFICATION  --***************************************************************************//
-  public function club_login($username,$password){
+  public function login($username,$password){
 
     $club_id=$this->get_club_id($username);
 
