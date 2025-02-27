@@ -98,7 +98,7 @@ public function get_club_date($club_id){
     if($club_id !== null){
      $db_password=$this->get_club_password($club_id);
     
-     if($db_password !== null && $db_password===$password){
+     if($db_password !== null && password_verify($password,$db_password)){
       return true;
      }
     }
@@ -114,7 +114,8 @@ public function get_club_date($club_id){
  }
 
  public function change_password($club_id,$new_password){
-  $query="UPDATE club SET password ='$new_password' where club_id = $club_id ";
+  $hashedPassword=password_hash($new_password,PASSWORD_DEFAULT);
+  $query="UPDATE club SET password ='$hashedPassword' where club_id = $club_id ";
   return $this->conn->query($query);
  }
  

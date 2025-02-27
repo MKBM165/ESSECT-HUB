@@ -43,7 +43,7 @@ public function admin_login($username,$password){
   $db_password=$this->get_db_password();
 
   if($db_username!==null && $db_password!==null){
-    return $username===$db_username && $password===$db_password;//return true if input data === db data
+    return $username===$db_username && password_verify($password, $db_password);//return true if input data === db data
   }
   return false;//if password or username are empty in the password  
 }
@@ -59,7 +59,8 @@ public function update_username($newUsername){
 
 //change admin password 
 public function update_password($newPassword){
-$query="UPDATE admin SET password = '$newPassword' LIMIT 1";
+$hashedPassword=password_hash($newPassword,PASSWORD_DEFAULT);
+$query="UPDATE admin SET password = '$hashedPassword' LIMIT 1";
 return $this->conn->query($query); //true if password updated successfully and
 }
 }
