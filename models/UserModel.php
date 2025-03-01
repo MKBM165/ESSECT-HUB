@@ -23,6 +23,12 @@ public function get_user_id($username){
   return null;
 }
 
+public function get_user_by_id($user_id){
+  $result = $this->result_query("SELECT * FROM users WHERE user_id = $user_id");
+  return $result ? $result->fetch_assoc() : null;
+}
+
+
 public function get_username($user_id){
   $result = $this->result_query("SELECT username FROM users WHERE user_id=$user_id");
 
@@ -124,5 +130,14 @@ public function change_cv($user_id, $new_cv){
   return $this->conn->query($query);
 }
 
+public function change_pic($user_id, $image){
+  return $this->result_query("UPDATE users SET profile_pic = '$image' WHERE user_id = $user_id");
+}
+
+
+public function create_user($username, $nom, $prenom, $cv, $password){
+   return $this->result_query( "INSERT INTO users (username, nom, prenom, cv, password) 
+  VALUES ('$username', '$nom', '$prenom', '$cv', '$password')");
+}
 }
 ?>

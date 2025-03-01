@@ -90,6 +90,11 @@ public function get_club_date($club_id){
  return null;
 }
 
+public function get_all_clubs(){
+  $result=$this->result_query("SELECT * FROM club");
+  return $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
+}
+
   // ************************************************************ --  AUTHENTIFICATION  --***************************************************************************//
   public function login($username,$password){
 
@@ -119,6 +124,21 @@ public function get_club_date($club_id){
   return $this->conn->query($query);
  }
  
+ public function create_club($nom, $username, $club_desc, $club_image, $password, $email){
+  return $this->result_query("INSERT INTO club (nom, username, club_desc, club_image, password, email, date_creation) 
+                              VALUES ('$nom', '$username', '$club_desc', '$club_image', '$password', '$email', NOW())")
+         ? true : false;
+}
+
+
+public function delete_club($club_id){
+  $result = $this->result_query("SELECT club_id FROM club WHERE club_id = $club_id");
+  if ($result->num_rows > 0) {
+      return $this->result_query("DELETE FROM club WHERE club_id = $club_id");
+  }
+  return false;
+}
+
 
 }
 ?>
