@@ -21,3 +21,15 @@ document.addEventListener("click", (e) => {
 aside.addEventListener("click", (e) => {
   e.stopPropagation();
 });
+
+/*
+user:{
+username : String,
+nom : string,
+prenom : string,
+clubs:[{
+id: string
+nom : string
+},{}]
+}
+*/
