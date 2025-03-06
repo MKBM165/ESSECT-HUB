@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const title = toastHeader.querySelector("strong");
 
     // Update toast content and styling
-    title.textContent = type.charAt(0).toUpperCase() + type.slice(1);
+    title.textContent = "Notification";
     toastBody.textContent = message;
     toastHeader.className = `toast-header bg-${type} text-white`;
 
@@ -149,7 +149,7 @@ document.addEventListener("DOMContentLoaded", () => {
       notifBox.style.display = "none";
     }
   });
-
+  /*
   // Simulate new join requests (for testing)
   setInterval(() => {
     const newUser = {
@@ -159,7 +159,7 @@ document.addEventListener("DOMContentLoaded", () => {
     joinRequests.push(newUser);
     updateNotifList();
     showToast(`${newUser.name} wants to join!`, "info");
-  }, 10000); // Every 10 seconds a new request appears
+  }, 10000); // Every 10 seconds a new request appears*/
 
   // Initialize notification list
   updateNotifList();
