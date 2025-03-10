@@ -22,15 +22,32 @@ aside.addEventListener("click", (e) => {
   e.stopPropagation();
 });
 
-/*
-user:{
-username : String,
-nom : string,
-prenom : string,
-clubs:[{
-id: string
-nom : string
-},{}]
-}
-*/
+const Flen = {
+  username: "FlenFouleni",
+  nom: "Flen",
+  prenom: "Fouleni",
+  clubs: [
+    {
+      id: 4,
+      nom: "ClubFouleni",
+    },
+    {
+      id: 4,
+      nom: "ClubFouleniESSECT",
+    },
+  ],
+};
+
 const UserName = document.getElementById("userName");
+const updateUIuser = function (user) {
+  UserName.textContent = user.prenom + " " + user.nom;
+  const clubslist = document.getElementById("clubs-list");
+  user.clubs.forEach((club) => {
+    const clubhtml = `<li class="club-item">
+        <a class="club-item-link" href="club-home.html"
+        >${club.nom}</a>
+      </li>`;
+    clubslist.insertAdjacentHTML("afterbegin", clubhtml);
+  });
+};
+updateUIuser(Flen);
