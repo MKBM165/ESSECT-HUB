@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login / Create User</title>
+    <link rel="stylesheet" href="assets/css/style.css" />
+  </head>
+  <body>
+    <h2>User Login or Create Account</h2>
+
+    <!-- Login Form -->
+    <div>
+      <h3>Login</h3>
+      <form id="loginForm">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" required />
+
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required />
+
+        <button type="submit">Login</button>
+      </form>
+    </div>
+
+    <hr />
+
+    <!-- Create Account Form -->
+    <div>
+      <h3>Create Account</h3>
+      <form id="createUserForm" enctype="multipart/form-data">
+        <label for="new_username">Username</label>
+        <input type="text" id="new_username" name="username" required />
+
+        <label for="nom">First Name</label>
+        <input type="text" id="nom" name="nom" required />
+
+        <label for="prenom">Last Name</label>
+        <input type="text" id="prenom" name="prenom" required />
+
+        <label for="password">Password</label>
+        <input type="password" id="new_password" name="password" required />
+
+        <label for="cv">CV (PDF, DOC)</label>
+        <input
+          type="file"
+          id="cv"
+          name="cv"
+          accept=".pdf,.doc,.docx"
+          required
+        />
+
+        <button type="submit">Create Account</button>
+      </form>
+    </div>
+
+    <script>
+      const loginForm = document.getElementById("loginForm");
+      const createUserForm = document.getElementById("createUserForm");
+
+      // Handle Login Form Submission
+      loginForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        formData.append("action", "login");
+
+        fetch("http://localhost/ESSECT-HUB/controllers/UserController.php", {
+          method: "POST",
+          body: formData,
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Server error, status code: " + response.status);
+            }
+            return response.json();
+          })
+          .then((data) => {
+            if (data.success) {
+              alert("Login Successful! Redirecting...");
+              sessionStorage.setItem("user", JSON.stringify(data));
+              window.location.href = "user-home.html";
+            } else {
+              alert("Login Failed: " + (data.error || "Invalid credentials."));
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            alert("An error occurred. Please try again.");
+          });
+      });
+
+      // Handle Create User Form Submission
+      createUserForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        formData.append("action", "create_user");
+
+        fetch("http://localhost/ESSECT-HUB/controllers/UserController.php", {
+          method: "POST",
+          body: formData,
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Server error, status code: " + response.status);
+            }
+            return response.json();
+          })
+          .then((data) => {
+            if (data.success) {
+              alert("User created successfully!");
+              window.location.href = "sign-in.html";
+            } else {
+              alert(
+                "Creation Failed: " + (data.error || "Error creating account.")
+              );
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            alert("An error occurred. Please try again.");
+          });
+      });
+    </script>
+  </body>
+</html>

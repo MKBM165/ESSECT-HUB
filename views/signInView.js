@@ -1,8 +1,10 @@
 const form = document.getElementById("loginForm");
+
 form.addEventListener("submit", function (e) {
   e.preventDefault();
-  console.log("clicked");
-  const formData = new FormData(this); // Get form data
+
+  const formData = new FormData(this);
+  formData.append("action", "login"); // ✅ Ensure "login" action is sent
 
   fetch("/controllers/UserController.php", {
     method: "POST",
@@ -14,11 +16,12 @@ form.addEventListener("submit", function (e) {
         alert("Login Successful! Redirecting...");
         sessionStorage.setItem("user", JSON.stringify(data));
         window.location.href = "user-home.html";
-
-        window.location.href = "user-home.html";
       } else {
-        alert("Login Failed: " + data.message);
+        alert("Login Failed: " + (data.error || "Invalid credentials."));
       }
     })
-    .catch((error) => console.error("Error:", error));
+    .catch((error) => {
+      console.error("Error:", error);
+      alert("An error occurred. Please try again.");
+    });
 });
