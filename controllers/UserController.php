@@ -2,6 +2,10 @@
 session_start();
 include('../models/DBconnection.php');
 include('../models/UserModel.php');
+header('Content-Type: application/json');
+echo json_encode($_POST); // This will help you debug the received data
+exit;
+
 
 header('Content-Type: application/json');
 
