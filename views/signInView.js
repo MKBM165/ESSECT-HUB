@@ -1,4 +1,5 @@
 const form = document.getElementById("loginForm");
+
 form.addEventListener("submit", function (e) {
   e.preventDefault();
   console.log("clicked");
@@ -17,8 +18,11 @@ form.addEventListener("submit", function (e) {
         sessionStorage.setItem("user", JSON.stringify(data));
         window.location.href = "user-home.html";
       } else {
-        alert("Login Failed: " + data.message);
+        alert("Login Failed: " + (data.error || "Invalid credentials."));
       }
     })
-    .catch((error) => console.error("Error:", error));
+    .catch((error) => {
+      console.error("Error:", error);
+      alert("An error occurred. Please try again.");
+    });
 });
