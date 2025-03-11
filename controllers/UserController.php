@@ -38,16 +38,19 @@ class UserController {
         $nom = $_POST['nom'] ?? null;
         $prenom = $_POST['prenom'] ?? null;
         $password = $_POST['password'] ?? null;
-
+    
         if (!isset($_FILES['cv'])) {
             echo json_encode(['error' => 'CV file is required']);
             exit;
         }
-
-        // Secure file upload
+    
         $cv_path = '../assets/uploads/' . basename($_FILES['cv']['name']);
-        move_uploaded_file($_FILES['cv']['tmp_name'], $cv_path);
-
+        
+        if (!move_uploaded_file($_FILES['cv']['tmp_name'], $cv_path)) {
+            echo json_encode(['error' => 'Failed to upload CV']);
+            exit;
+        }
+    
         if ($username && $nom && $prenom && $password) {
             if ($this->userModel->create_user($username, $nom, $prenom, $cv_path, $password)) {
                 echo json_encode(['success' => true, 'message' => 'User created successfully']);
@@ -59,6 +62,7 @@ class UserController {
         }
         exit;
     }
+    
 
     public function change_username() {
         if (!isset($_SESSION['username'])) {
