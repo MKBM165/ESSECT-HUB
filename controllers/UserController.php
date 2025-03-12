@@ -5,9 +5,6 @@ include('../models/UserModel.php');
 header('Content-Type: application/json');
 
 
-
-header('Content-Type: application/json');
-
 class UserController {
     private $userModel;
 

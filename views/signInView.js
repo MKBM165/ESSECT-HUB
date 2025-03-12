@@ -10,12 +10,10 @@ form.addEventListener("submit", function (e) {
     method: "POST",
     body: formData,
   })
-    .then((response) => response.json()) // Convert response to JSON
+    .then((response) => response.json())
     .then((data) => {
       console.log(data);
       if (data.success) {
-        alert("Login Successful! Redirecting...");
-        sessionStorage.setItem("user", JSON.stringify(data));
         window.location.href = "user-home.html";
       } else {
         alert("Login Failed: " + (data.error || "Invalid credentials."));

@@ -21,7 +21,7 @@ document.addEventListener("click", (e) => {
 aside.addEventListener("click", (e) => {
   e.stopPropagation();
 });
-
+/*
 const Flen = {
   username: "FlenFouleni",
   nom: "Flen",
@@ -37,7 +37,7 @@ const Flen = {
     },
   ],
 };
-
+*/
 const UserName = document.getElementById("userName");
 const updateUIuser = function (user) {
   UserName.textContent = user.prenom + " " + user.nom;
@@ -50,4 +50,35 @@ const updateUIuser = function (user) {
     clubslist.insertAdjacentHTML("afterbegin", clubhtml);
   });
 };
-updateUIuser(Flen);
+document.addEventListener("DOMContentLoaded", function () {
+  fetch("http://localhost/ESSECT-HUB/controllers/UserController.php", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: "action=get_user_profile", // Send the required action
+    credentials: "include", // Ensure session cookies are sent
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.success) {
+        // Update UI with user data
+        updateUIuser(user);
+
+        // Display user clubs
+        const clubsList = document.getElementById("clubsList");
+        clubsList.innerHTML = ""; // Clear existing content
+        data.user.clubs.forEach((club) => {
+          const clubItem = document.createElement("li");
+          clubItem.textContent = club.name;
+          clubsList.appendChild(clubItem);
+        });
+      } else {
+        console.error("Error:", data.error);
+        document.getElementById("userInfo").innerHTML = `<p>${data.error}</p>`;
+      }
+    })
+    .catch((error) => {
+      console.error("Error fetching profile:", error);
+    });
+});

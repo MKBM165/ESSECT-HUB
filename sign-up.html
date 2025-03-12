@@ -20,14 +20,37 @@
         Join ESSECT Clubs and connect with like-minded students.
       </p>
 
-      <form>
+      <form id="createUser" enctype="multipart/form-data">
         <div class="mb-3 text-start">
-          <label for="fullname" class="form-label">Full Name</label>
+          <label for="username" class="form-label">Username</label>
           <input
+            name="username"
             type="text"
             class="form-control border-secondary"
-            id="fullname"
-            placeholder="John Doe"
+            id="username"
+            placeholder="JohnDoe192"
+            required
+          />
+        </div>
+        <div class="mb-3 text-start">
+          <label for="firstName" class="form-label">First Name</label>
+          <input
+            name="prenom"
+            type="text"
+            class="form-control border-secondary"
+            id="firstName"
+            placeholder="John"
+            required
+          />
+        </div>
+        <div class="mb-3 text-start">
+          <label for="lastName" class="form-label">Last Name</label>
+          <input
+            name="nom"
+            type="text"
+            class="form-control border-secondary"
+            id="lastName"
+            placeholder="Doe"
             required
           />
         </div>
@@ -35,6 +58,7 @@
         <div class="mb-3 text-start">
           <label for="email" class="form-label">Email address</label>
           <input
+            name="email"
             type="email"
             class="form-control border-secondary"
             id="email"
@@ -46,6 +70,7 @@
         <div class="mb-3 text-start">
           <label for="password" class="form-label">Password</label>
           <input
+            name="password"
             type="password"
             class="form-control border-secondary"
             id="password"
@@ -63,6 +88,7 @@
           <p id="upload-text">📄 Drag & Drop your CV here or click to upload</p>
           <input
             type="file"
+            name="cv"
             id="cvFile"
             accept=".pdf,.doc,.docx"
             class="d-none"
@@ -71,7 +97,7 @@
         </div>
 
         <button type="submit" class="btn btn-dark w-100 py-2 mb-3">
-          Sign Up
+          Create Account
         </button>
 
         <p class="text-muted">
