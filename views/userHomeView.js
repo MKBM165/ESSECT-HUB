@@ -59,20 +59,18 @@ document.addEventListener("DOMContentLoaded", function () {
     body: "action=get_user_profile", // Send the required action
     credentials: "include", // Ensure session cookies are sent
   })
-    .then((response) => response.json())
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Server error, status code: " + response.status);
+      }
+      console.log(response.text());
+      return response.json();
+    })
     .then((data) => {
       if (data.success) {
         // Update UI with user data
-        updateUIuser(user);
-
-        // Display user clubs
-        const clubsList = document.getElementById("clubsList");
-        clubsList.innerHTML = ""; // Clear existing content
-        data.user.clubs.forEach((club) => {
-          const clubItem = document.createElement("li");
-          clubItem.textContent = club.name;
-          clubsList.appendChild(clubItem);
-        });
+        console.log(data);
+        updateUIuser(data.user);
       } else {
         console.error("Error:", data.error);
         document.getElementById("userInfo").innerHTML = `<p>${data.error}</p>`;
