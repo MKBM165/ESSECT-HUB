@@ -81,6 +81,21 @@ class UserController {
         exit;
     }
 
+   public function get_user_id(){
+    $username=$_POST['username']??null;
+    if ($username){
+        $user_id=$this->userModel->get_user_id($username);
+
+        if($user_id){
+            echo json_encode(['success'=>true,'user_id' => $user_id]);
+        }else{
+            echo json_encode(['error'=>'user not found']);
+        }
+    }
+   exit;
+   }
+
+
     public function get_user_profile() {
         $user_id = $_SESSION['user_id'];
         $user = $this->userModel->get_user_by_id($user_id);
@@ -130,6 +145,8 @@ switch ($action) {
     case 'get_user_feed':
         $userController->get_user_feed();
         break;
+    case 'get_user_id':
+        $userController->get_user_id();
     default:
         echo json_encode(['error' => 'Invalid action']);
         break;

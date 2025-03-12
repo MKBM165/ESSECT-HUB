@@ -16,6 +16,12 @@ class UserModel {
     }
 
     // ************************************************************ -- GETTERS -- *************************************************************************** //
+   public function get_user_id($username){
+    $stmt=$this->result_query("SELECT user_id FROM users WHERE username=?",[$username]);
+    $user=$stmt ->fetch(PDO::FETCH_ASSOC);
+    return $user ? $user['user_id']:null;
+   }
+
 
     public function get_user_profile($user_id) {
         $stmt = $this->result_query("SELECT user_id, username, nom, prenom, cv FROM users WHERE user_id = ?", [$user_id]);
