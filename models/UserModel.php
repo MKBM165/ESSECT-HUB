@@ -28,8 +28,8 @@ class UserModel {
         $profile = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($profile) {
-            $clubsStmt = $this->result_query("SELECT c.club_id, c.nom FROM member m JOIN club c ON m.club_id = c.club_id WHERE m.user_id = ?", [$user_id]);
-            $profile['clubs'] = $clubsStmt->fetchAll(PDO::FETCH_ASSOC);
+            $clubs = $this->result_query("SELECT c.club_id, c.nom FROM member m JOIN club c ON m.club_id = c.club_id WHERE m.user_id = ?", [$user_id]);
+            $profile['clubs'] = $clubs->fetchAll(PDO::FETCH_ASSOC);
             return $profile;
         }
         return null;

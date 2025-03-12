@@ -63,13 +63,13 @@ document.addEventListener("DOMContentLoaded", function () {
       if (!response.ok) {
         throw new Error("Server error, status code: " + response.status);
       }
-      console.log(response.text());
+      // console.log(response.text());
       return response.json();
     })
     .then((data) => {
       if (data.success) {
         // Update UI with user data
-        console.log(data);
+        console.log(data.user.clubs);
         updateUIuser(data.user);
       } else {
         console.error("Error:", data.error);

@@ -19,6 +19,7 @@ class UserController {
         if ($username && $password) {
             if ($this->userModel->login($username, $password)) {
                 $_SESSION['username'] = $username;
+                $_SESSION['user_id'] = $this->userModel->get_user_id($username);
                 echo json_encode(['success' => true, 'message' => 'Login successful']);
             } else {
                 echo json_encode(['error' => 'Invalid username or password']);
@@ -98,11 +99,9 @@ class UserController {
 
     public function get_user_profile() {
         $user_id = $_SESSION['user_id'];
-        $user = $this->userModel->get_user_by_id($user_id);
-        $clubs = $this->userModel->get_user_clubs($user_id);
+        $user = $this->userModel->get_user_profile($user_id);
     
-        if ($user) {
-            $user['clubs'] = $clubs;  
+        if ($user) {  
             echo json_encode(['success' => true, 'user' => $user]);
         } else {
             echo json_encode(['error' => 'User not found']);
