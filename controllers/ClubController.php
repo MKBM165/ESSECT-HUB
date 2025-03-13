@@ -98,5 +98,37 @@ class ClubController {
             echo json_encode(['error' => 'Club ID is required']);
         }
     }
+    public function get_all_clubs() {
+        $clubs = $this->clubModel->get_all_clubs();
+    
+        if ($clubs) {  
+            echo json_encode(['success' => true, 'clubs' => $clubs]);
+        } else {
+            echo json_encode(['error' => 'Clubs not found']);
+        }
+    }
 }
+
+$clubController = new ClubController($conn);
+$action = $_POST['action'] ?? null;
+
+switch ($action) {
+    case 'getclubs':
+        $clubController->get_all_clubs();
+        break;
+    case 'upload_club_image':
+        $clubController->upload_club_image();
+        break;
+    case 'create_club':
+        $clubController->create_club();
+        break;
+    case 'delete_club':
+        $clubController->delete_club();
+        break;
+    default:
+        echo json_encode(['error' => 'Invalid action']);
+        break;
+}
+
+$conn = null;
 ?>

@@ -132,20 +132,22 @@ switch ($action) {
     case 'login':
         $userController->login();
         break;
-    case 'create_user':
-        $userController->create_user();
+        case 'create_user':
+            $userController->create_user();
         break;
     case 'change_username':
         $userController->change_username();
         break;
     case 'get_user_profile':
         $userController->get_user_profile();
+        session_destroy();
         break;
     case 'get_user_feed':
         $userController->get_user_feed();
         break;
     case 'get_user_id':
         $userController->get_user_id();
+        break;
     default:
         echo json_encode(['error' => 'Invalid action']);
         break;

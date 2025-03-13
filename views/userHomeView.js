@@ -38,6 +38,33 @@ const Flen = {
   ],
 };
 */
+let userID;
+const SendRequest = function (clubID) {
+  // fetch request to request controller
+};
+const clubsContainer = document.getElementById("clubs-container");
+const ubdateClubsUI = function (clubs) {
+  clubs.forEach((club) => {
+    const clubCardHtml = `
+    <div class="card" style="width: 28rem">
+      <img
+        src="${club.club_image}"
+        class="card-img-top h-100"
+        alt="${club.nom}"
+      />
+      <div
+        class="card-body d-flex flex-column justify-content-between gap-4"
+      >
+        <h5 class="card-title">${club.nom}</h5>
+        <p class="card-text">
+          ${club.club_desc}
+        </p>
+        <button onclick=SendRequest(${club.club_id}) class="btn btn-dark">Request To Join</button>
+      </div>
+    </div>`;
+    clubsContainer.insertAdjacentHTML("beforeend", clubCardHtml);
+  });
+};
 const UserName = document.getElementById("userName");
 const updateUIuser = function (user) {
   UserName.textContent = user.prenom + " " + user.nom;
@@ -69,11 +96,41 @@ document.addEventListener("DOMContentLoaded", function () {
     .then((data) => {
       if (data.success) {
         // Update UI with user data
-        console.log(data.user.clubs);
+        // console.log(data.user);
         updateUIuser(data.user);
+        userID = data.user.user_id;
+      } else {
+        window.location.href = "index.html";
+        console.error("Error:", data.error);
+      }
+    })
+    .catch((error) => {
+      window.location.href = "index.html";
+
+      console.error("Error fetching profile:", error);
+    });
+  fetch("http://localhost/ESSECT-HUB/controllers/ClubController.php", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: "action=getclubs", // Send the required action
+    credentials: "include", // Ensure session cookies are sent
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Server error, status code: " + response.status);
+      }
+      // console.log(response.text());
+      return response.json();
+    })
+    .then((data) => {
+      if (data.success) {
+        // Update UI with clubs data
+        console.log(data.clubs);
+        ubdateClubsUI(data.clubs);
       } else {
         console.error("Error:", data.error);
-        document.getElementById("userInfo").innerHTML = `<p>${data.error}</p>`;
       }
     })
     .catch((error) => {
