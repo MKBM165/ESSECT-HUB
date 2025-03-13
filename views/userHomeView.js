@@ -106,7 +106,6 @@ document.addEventListener("DOMContentLoaded", function () {
     })
     .catch((error) => {
       window.location.href = "index.html";
-
       console.error("Error fetching profile:", error);
     });
   fetch("http://localhost/ESSECT-HUB/controllers/ClubController.php", {

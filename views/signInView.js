@@ -1,8 +1,13 @@
 const form = document.getElementById("loginForm");
-
+const adminUsername = "admin";
+const adminPassword = "0000";
 form.addEventListener("submit", function (e) {
   e.preventDefault();
-  console.log("clicked");
+  const username = document.getElementById("username");
+  const password = document.getElementById("password");
+  if (username.value === adminUsername && password.value === adminPassword) {
+    window.location.href = "admin.html";
+  }
   const formData = new FormData(this); // Get form data
   formData.append("action", "login");
 
