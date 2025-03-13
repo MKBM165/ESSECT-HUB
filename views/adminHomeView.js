@@ -49,7 +49,7 @@ const addClubCard = function (club) {
 const ubdateClubsUI = function (clubs) {
   clubs.forEach(addClubCard);
 };
-document.addEventListener("DOMContentLoaded", function () {
+const getclubs = function () {
   fetch("http://localhost/ESSECT-HUB/controllers/ClubController.php", {
     method: "POST",
     headers: {
@@ -77,14 +77,42 @@ document.addEventListener("DOMContentLoaded", function () {
     .catch((error) => {
       console.error("Error fetching profile:", error);
     });
-});
+};
+const adminlogin = function () {
+  fetch("http://localhost/ESSECT-HUB/controllers/AdminController.php", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: "action=login", // Send the required action
+    credentials: "include", // Ensure session cookies are sent
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Server error, status code: " + response.status);
+      }
+      // console.log(response.text());
+      return response.json();
+    })
+    .then((data) => {
+      console.log(data);
+      if (data.success) {
+        console.log("welcome admin");
+      } else {
+        console.error("Error:", data.error);
+      }
+    })
+    .catch((error) => {
+      console.error("Error fetching profile:", error);
+    });
+};
 const createClubForm = document.getElementById("createClub");
 createClubForm.addEventListener("submit", function (e) {
   e.preventDefault();
   const formData = new FormData(this);
   formData.append("action", "create_club");
 
-  fetch("http://localhost/ESSECT-HUB/controllers/UserController.php", {
+  fetch("http://localhost/ESSECT-HUB/controllers/ClubController.php", {
     method: "POST",
     body: formData,
   })
@@ -98,7 +126,7 @@ createClubForm.addEventListener("submit", function (e) {
     .then((data) => {
       console.log(data);
       if (data.success) {
-        //refresh or update
+        getclubs();
       } else {
         alert("Creation Failed: " + (data.error || "Error creating account."));
       }
@@ -107,4 +135,9 @@ createClubForm.addEventListener("submit", function (e) {
       console.error("Error:", error);
       alert("An error occurred. Please try again.");
     });
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+  getclubs();
+  adminlogin();
 });

@@ -67,7 +67,7 @@ class ClubController {
             exit;
         }
 
-        $image_path = '../assets/uploads/' . basename($_FILES['club_image']['name']);
+        $image_path = '/ESSECT-HUB/assets/uploads/' . basename($_FILES['club_image']['name']);
         move_uploaded_file($_FILES['club_image']['tmp_name'], $image_path);
 
         if ($nom && $username && $club_desc && $password && $email) {

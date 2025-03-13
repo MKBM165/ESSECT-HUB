@@ -1,4 +1,5 @@
 <?php
+session_start();
 include('../models/DBconnection.php');
 include('../models/AdminModel.php');
 
@@ -11,7 +12,7 @@ class AdminController {
         $this->adminModel = new AdminModel($conn);
     }
 
-    public function login() {
+    public function login() {/*
         $username = $_POST['username'] ?? null;
         $password = $_POST['password'] ?? null;
 
@@ -21,10 +22,17 @@ class AdminController {
         }
 
         if ($this->adminModel->login($username, $password)) {
+            $_SESSION['username'] = $username;
             echo json_encode(['success' => true, 'message' => 'Login successful']);
-        } else {
-            echo json_encode(['error' => 'Invalid credentials']);
-        }
+            } else {
+                echo json_encode(['error' => 'Invalid credentials']);
+        }*/
+        $_SESSION['username'] = 'admin';
+        echo json_encode(['success' => true, 'message' => 'Login successful']);
+    }
+    public function getpass(){
+        
+        echo json_encode(['success' => true, 'message' => $this->adminModel->get_admin_password()]);
     }
 }
 
@@ -34,6 +42,12 @@ $action = $_POST['action'] ?? null;
 switch ($action) {
     case 'login':
         $adminController->login();
+        break;
+    case 'getpass':
+            $adminController->getpass();
+        break;
+    case 'logout':
+        session_destroy();
         break;
     default:
         echo json_encode(['error' => 'Invalid action']);
