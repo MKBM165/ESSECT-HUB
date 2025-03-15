@@ -19,6 +19,7 @@ class PostController {
 
     public function create_post() {
         $user_id = $_SESSION['user_id'];
+        // $club_id = $_SESSION['club_id'] ?? null;
         $club_id = $_POST['club_id'] ?? null;
         $caption = $_POST['caption'] ?? null;
         $image = $_POST['image'] ?? null;
@@ -91,6 +92,7 @@ class PostController {
 }
 
 $postController = new PostController($conn);
+$_POST = json_decode(file_get_contents('php://input'), true) ?? $_POST;
 $action = $_POST['action'] ?? null;
 
 switch ($action) {

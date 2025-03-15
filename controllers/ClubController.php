@@ -116,6 +116,7 @@ class ClubController {
         }
     }
     public function get_all_clubs() {
+        
         $clubs = $this->clubModel->get_all_clubs();
     
         if ($clubs) {  
@@ -124,9 +125,24 @@ class ClubController {
             echo json_encode(['error' => 'Clubs not found']);
         }
     }
+    public function get_club_info() {
+        
+        $club_id = $_SESSION['club_id'] ?? null;
+        $club = $this->clubModel->get_club_info();
+        if (!$club_id) {
+            
+            echo json_encode(['error' => 'Club not found in Session']);
+        }
+        if ($club) {  
+            echo json_encode(['success' => true, 'club' => $club]);
+        } else {
+            echo json_encode(['error' => 'Club data not found']);
+        }
+    }
 }
 
 $clubController = new ClubController($conn);
+$_POST = json_decode(file_get_contents('php://input'), true) ?? $_POST;
 $action = $_POST['action'] ?? null;
 
 switch ($action) {
@@ -135,6 +151,9 @@ switch ($action) {
         break;
     case 'getclubs':
         $clubController->get_all_clubs();
+        break;
+    case 'getclubinfo':
+        $clubController->get_club_info();
         break;
     case 'upload_club_image':
         $clubController->upload_club_image();

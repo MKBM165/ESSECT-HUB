@@ -23,31 +23,60 @@ uploadArea.addEventListener("drop", (e) => {
   uploadText.textContent = `📄 ${fileName}`;
   uploadArea.style.borderColor = "rgba(255, 255, 255, 0.4)";
 });
-
+const deleteClub = function (clubId) {
+  fetch("http://localhost/ESSECT-HUB/controllers/ClubController.php", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json", // Ensure JSON format
+    },
+    body: JSON.stringify({
+      action: "delete_club",
+      club_id: clubId,
+    }),
+  })
+    .then((response) => {
+      // console.log(response.text());
+      return response.json();
+    })
+    .then((data) => {
+      console.log(data);
+      if (data.success) {
+        console.log("✅ Deleted successfully:", data.message);
+        getclubs();
+      } else {
+        console.error("❌ Error:", data.error);
+      }
+    })
+    .catch((error) => console.error("Fetch error:", error));
+};
 //RENDER CLUBS
 const addClubCard = function (club) {
   const clubsContainer = document.getElementById("clubs-container");
   const clubCardHtml = `
-    <div class="card" style="width: 28rem">
-      <img
-        src="${club.club_image}"
-        class="card-img-top"
-        alt="${club.nom}"
-      />
-      <div
-        class="card-body d-flex flex-column justify-content-between gap-4"
-      >
-        <h5 class="card-title">${club.nom}</h5>
-        <p class="card-text">
-          ${club.club_desc}
-        </p>
-        <a href="sign-in.html" class="btn btn-dark">Visit Club</a>
-        <a href="admin.html" class="btn btn-danger">Delete</a>
-      </div>
-    </div>`;
+  <div class="card" style="width: 28rem">
+  <img
+  src="${club.club_image}"
+  class="card-img-top"
+  alt="${club.nom}"
+  />
+  <div
+  class="card-body d-flex flex-column justify-content-between gap-4"
+  >
+  <h5 class="card-title">${club.nom}</h5>
+  <p class="card-text">
+  ${club.club_desc}
+  </p>
+  <div>
+  <a href="sign-in.html" class="btn btn-dark">Visit Club</a>
+  <button onclick=deleteClub(${club.club_id}) class="btn btn-danger">Delete</button>
+  </div>
+  </div>
+  </div>`;
   clubsContainer.insertAdjacentHTML("beforeend", clubCardHtml);
 };
 const ubdateClubsUI = function (clubs) {
+  const clubsContainer = document.getElementById("clubs-container");
+  clubsContainer.innerHTML = "";
   clubs.forEach(addClubCard);
 };
 const getclubs = function () {

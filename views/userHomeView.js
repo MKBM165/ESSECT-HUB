@@ -39,8 +39,31 @@ const Flen = {
 };
 */
 let userID;
-const SendRequest = function (clubID) {
-  // fetch request to request controller
+const SendRequest = function (clubId) {
+  fetch("http://localhost/ESSECT-HUB/controllers/RequestController.php", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json", // Ensure JSON format
+    },
+    body: JSON.stringify({
+      action: "add_request",
+      user_id: userID,
+      club_id: clubId,
+    }),
+  })
+    .then((response) => {
+      // console.log(response.text());
+      return response.json();
+    })
+    .then((data) => {
+      console.log(data);
+      if (data.success) {
+        console.log("✅ Request sent successfully:", data.message);
+      } else {
+        console.error("❌ Error:", data.error);
+      }
+    })
+    .catch((error) => console.error("Fetch error:", error));
 };
 const clubsContainer = document.getElementById("clubs-container");
 const ubdateClubsUI = function (clubs) {

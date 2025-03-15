@@ -5,7 +5,7 @@ class RequestModel{
 
   private $conn;
 
-  public function __construct(){
+  public function __construct($conn){
     $this->conn=$conn;
   }
 
@@ -33,8 +33,19 @@ class RequestModel{
 
 
  public function make_request($user_id,$club_id){
-  $query="INSERT INTO join_requests (user_id, club_id) VALUES (?, ?)";
-  return $this->result_query($query,[$user_id,$club_id]);
+        $query = "SELECT COUNT(*) FROM join_requests WHERE user_id = ? AND club_id = ?";
+        $stmt = $this->result_query($query, [$user_id, $club_id]);
+        $count = $stmt->fetchColumn();
+    
+        if ($count > 0) {
+            return ['error' => 'Request already sent'];
+        }
+    
+        // If no existing request, insert a new one
+        $query = "INSERT INTO join_requests (user_id, club_id) VALUES (?, ?)";
+        $inserted = $this->result_query($query, [$user_id, $club_id]);
+    
+        return $inserted ? ['success' => true, 'message' => 'Request sent successfully'] : ['error' => 'Failed to send request'];
  }
 
  public function update_request_status($user_id , $club_id ,$newStatus){

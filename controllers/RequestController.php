@@ -51,26 +51,28 @@ public function get_club_requests(){
    exit;
   }
 
-public function add_request(){
-  $user_id = $_POST['user_id']??null;
-  $club_id = $_POST['club_id']??null;
+  public function add_request() {
+    $user_id = $_POST['user_id'] ?? null;
+    $club_id = $_POST['club_id'] ?? null;
 
-  if (!$user_id || !$club_id){
-    echo json_encode(['error'=> 'Missing parameters']);
+    if (!$user_id || !$club_id) {
+        echo json_encode(['error' => 'Missing parameters']);
+        exit;
+    }
+
+    // Call the updated make_request method
+    $result = $this->requestModel->make_request($user_id, $club_id);
+
+    // Check if the result contains 'error' or 'success'
+    if (isset($result['success'])) {
+        echo json_encode(['success' => true, 'message' => $result['message']]);
+    } else {
+        echo json_encode(['error' => $result['error']]);
+    }
+
     exit;
-  }
-  
-  $result = $this->requestModel->make_request($user_id,$club_id);
-
-  if($result){
-    echo json_encode(['success' => true , 'message' => 'request sent successfully']);
-  }
-  else{
-    echo json_encode(['error'=>'Failed to send request']);
-  }
- 
-exit;
 }
+
 
 public function manage_request(){
   $user_id = $_POST['user_id'] ?? null;
@@ -102,6 +104,8 @@ public function manage_request(){
 }
 
 $requestController = new RequestController($conn);
+$_POST = json_decode(file_get_contents('php://input'), true) ?? $_POST;
+
 $action =$_POST['action']??null;
 
 switch($action){

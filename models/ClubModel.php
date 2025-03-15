@@ -20,7 +20,25 @@ class ClubModel{
   }
 
   // ************************************************************ --  GETTERS  --***************************************************************************//
+  public function get_club_info($club_id) {
+    $query = "
+        SELECT 
+            nom,club_id,
+            username, 
+            password, 
+            club_desc , 
+            club_image , 
+            email, 
+            DATE_FORMAT(date_creation, '%d/%m/%y') AS date_created
+        FROM club
+        WHERE club_id = :club_id
+    ";
+    
+    $stmt = $this->result_query($query, [':club_id' => $club_id]);
+    $row = $stmt->fetch(PDO::FETCH_OBJ);
 
+    return $row ? $row : null; 
+}
   public function get_club_name($club_id){
     $query = "SELECT nom FROM club WHERE club_id = :club_id";
     $stmt = $this->result_query($query, [':club_id' => $club_id]);
@@ -90,23 +108,23 @@ class ClubModel{
   // ************************************************************ --  AUTHENTIFICATION  --***************************************************************************//
 
   public function login($username, $password){
-    // $club_id = $this->get_club_id($username);
+    $club_id = $this->get_club_id($username);
 
-    // if ($club_id !== null) {
-    //   $db_password = $this->get_club_password($club_id);
+    if ($club_id !== null) {
+      $db_password = $this->get_club_password($club_id);
     
-    //   if ($db_password !== null && password_verify($password, $db_password)) {
-    //     return true;
-    //   }
-    // }
-    // return false;
-    $stmt = $this->result_query("SELECT club_id, password FROM clubs WHERE username = ?", [$username]);
+      if ($db_password !== null && password_verify($password, $db_password)) {
+        return true;
+      }
+    }
+    return false;
+    /*$stmt = $this->result_query("SELECT club_id, password FROM clubs WHERE username = ?", [$username]);
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($result && password_verify($password, $result['password'])) {
             return true;
         }
-        return false;
+        return false;*/
   }
 
   // ************************************************************ --  ENABLE MODIFICATION  --***************************************************************************//

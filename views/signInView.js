@@ -20,8 +20,8 @@ form.addEventListener("submit", function (e) {
       if (data.success) {
         window.location.href = "club-home.html";
       } else {
-        alert("Login Failed: " + (data.error || "Invalid credentials."));
-        /*
+        //alert("Login Failed: " + (data.error || "Invalid credentials."));
+
         fetch("/ESSECT-HUB/controllers/UserController.php", {
           method: "POST",
           body: formData,
@@ -38,7 +38,7 @@ form.addEventListener("submit", function (e) {
           .catch((error) => {
             console.error("Error:", error);
             alert("An error occurred. Please try again.");
-          });*/
+          });
       }
     })
     .catch((error) => {

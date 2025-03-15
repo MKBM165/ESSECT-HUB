@@ -70,6 +70,7 @@ class ReactionController {
 
 // Communicating with frontend
 $reactionController = new ReactionController($conn);
+$_POST = json_decode(file_get_contents('php://input'), true) ?? $_POST;
 $action = $_POST['action'] ?? null;
 
 switch ($action) {
