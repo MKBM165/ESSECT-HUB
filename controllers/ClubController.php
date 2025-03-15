@@ -11,6 +11,23 @@ class ClubController {
     public function __construct($conn) {
         $this->clubModel = new ClubModel($conn);
     }
+    public function login() {
+        $username = $_POST['username'] ?? null;
+        $password = $_POST['password'] ?? null;
+
+        if ($username && $password) {
+            if ($this->clubModel->login($username, $password)) {
+                $_SESSION['username'] = $username;
+                $_SESSION['club_id'] = $this->clubModel->get_club_id($username);
+                echo json_encode(['success' => true, 'message' => 'Login successful']);
+            } else {
+                echo json_encode(['error' => 'Invalid username or password']);
+            }
+        } else {
+            echo json_encode(['error' => 'Username and password are required']);
+        }
+        exit;
+    }
 
     public function upload_club_image() {
         if (!isset($_FILES['club_image'])) {
@@ -113,6 +130,9 @@ $clubController = new ClubController($conn);
 $action = $_POST['action'] ?? null;
 
 switch ($action) {
+    case 'login':
+        $clubController->login();
+        break;
     case 'getclubs':
         $clubController->get_all_clubs();
         break;

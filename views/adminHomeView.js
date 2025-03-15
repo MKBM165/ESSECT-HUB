@@ -25,13 +25,13 @@ uploadArea.addEventListener("drop", (e) => {
 });
 
 //RENDER CLUBS
-const clubsContainer = document.getElementById("clubs-container");
 const addClubCard = function (club) {
+  const clubsContainer = document.getElementById("clubs-container");
   const clubCardHtml = `
     <div class="card" style="width: 28rem">
       <img
         src="${club.club_image}"
-        class="card-img-top h-100"
+        class="card-img-top"
         alt="${club.nom}"
       />
       <div
@@ -42,6 +42,7 @@ const addClubCard = function (club) {
           ${club.club_desc}
         </p>
         <a href="sign-in.html" class="btn btn-dark">Visit Club</a>
+        <a href="admin.html" class="btn btn-danger">Delete</a>
       </div>
     </div>`;
   clubsContainer.insertAdjacentHTML("beforeend", clubCardHtml);

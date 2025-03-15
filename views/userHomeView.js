@@ -49,7 +49,7 @@ const ubdateClubsUI = function (clubs) {
     <div class="card" style="width: 28rem">
       <img
         src="${club.club_image}"
-        class="card-img-top h-100"
+        class="card-img-top"
         alt="${club.nom}"
       />
       <div

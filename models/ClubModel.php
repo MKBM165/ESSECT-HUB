@@ -90,16 +90,23 @@ class ClubModel{
   // ************************************************************ --  AUTHENTIFICATION  --***************************************************************************//
 
   public function login($username, $password){
-    $club_id = $this->get_club_id($username);
+    // $club_id = $this->get_club_id($username);
 
-    if ($club_id !== null) {
-      $db_password = $this->get_club_password($club_id);
+    // if ($club_id !== null) {
+    //   $db_password = $this->get_club_password($club_id);
     
-      if ($db_password !== null && password_verify($password, $db_password)) {
-        return true;
-      }
-    }
-    return false;
+    //   if ($db_password !== null && password_verify($password, $db_password)) {
+    //     return true;
+    //   }
+    // }
+    // return false;
+    $stmt = $this->result_query("SELECT club_id, password FROM clubs WHERE username = ?", [$username]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($result && password_verify($password, $result['password'])) {
+            return true;
+        }
+        return false;
   }
 
   // ************************************************************ --  ENABLE MODIFICATION  --***************************************************************************//
