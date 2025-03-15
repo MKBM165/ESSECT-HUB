@@ -24,6 +24,32 @@ let joinRequests = [
   { id: 1, name: "Alice" },
   { id: 2, name: "Bob" },
 ];
+const getRequests = function () {
+  fetch("http://localhost/ESSECT-HUB/controllers/RequestController.php", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json", // Ensure JSON format
+    },
+    body: JSON.stringify({
+      action: "get_club_requests",
+      club_id: clubId,
+    }),
+  })
+    .then((response) => {
+      // console.log(response.text());
+      return response.json();
+    })
+    .then((data) => {
+      console.log(data);
+      if (data.success) {
+        updateNotifList(data.requests);
+        console.log("✅ Posts downloaded successfully:", data.message);
+      } else {
+        console.error("❌ Error:", data.error);
+      }
+    })
+    .catch((error) => console.error("Fetch error:", error));
+};
 function updateNotifList(joinRequests) {
   notifList.innerHTML = ""; // Clear the list
   notifCount.textContent = joinRequests.length; // Update badge count
@@ -182,6 +208,7 @@ const getClubPosts = function (clubId) {
     .then((data) => {
       console.log(data);
       if (data.success) {
+        updatePostsUI(data.posts);
         console.log("✅ Posts downloaded successfully:", data.message);
       } else {
         console.error("❌ Error:", data.error);
@@ -227,6 +254,31 @@ const addPostCard = function (post) {
 };
 const reaction = function (postId, reactionType) {
   //reaction fetch function
+  fetch("http://localhost/ESSECT-HUB/controllers/ReactionController.php", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json", // Ensure JSON format
+    },
+    body: JSON.stringify({
+      action: "react_to_post",
+      post_id: postId,
+      reaction: reactionType,
+    }),
+  })
+    .then((response) => {
+      // console.log(response.text());
+      return response.json();
+    })
+    .then((data) => {
+      console.log(data);
+      if (data.success) {
+        showToast(reactionType + "Reacted successfully!", "success");
+        console.log("✅ Reacted successfully:", data.message);
+      } else {
+        console.error("❌ Error:", data.error);
+      }
+    })
+    .catch((error) => console.error("Fetch error:", error));
 };
 const updatePostsUI = function (posts) {
   const postsContainer = document.getElementById("posts-container");

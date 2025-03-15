@@ -89,7 +89,7 @@ class ClubController {
 
         if ($nom && $username && $club_desc && $password && $email) {
             if ($this->clubModel->create_club($nom, $username, $club_desc, $image_path, $password, $email)) {
-                echo json_encode(['success' => true]);
+                echo json_encode(['success' => true, 'message' => 'Club Created successfully']);
             } else {
                 echo json_encode(['error' => 'Club creation failed']);
             }

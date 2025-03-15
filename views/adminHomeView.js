@@ -154,8 +154,10 @@ createClubForm.addEventListener("submit", function (e) {
       return response.json();
     })
     .then((data) => {
-      console.log(data);
+      // console.log(data);
       if (data.success) {
+        console.log("✅ created successfully:", data.message);
+
         getclubs();
       } else {
         alert("Creation Failed: " + (data.error || "Error creating account."));
@@ -168,6 +170,6 @@ createClubForm.addEventListener("submit", function (e) {
 });
 
 document.addEventListener("DOMContentLoaded", function () {
-  getclubs();
   adminlogin();
+  getclubs();
 });
