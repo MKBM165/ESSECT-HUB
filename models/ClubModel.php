@@ -7,17 +7,12 @@ class ClubModel{
   public function __construct($conn){
     $this->conn = $conn;
   }
-
-  private function result_query($query, $params = []){
+  
+  private function result_query($query, $params = []) {
     $stmt = $this->conn->prepare($query);
-    if ($params) {
-      foreach ($params as $key => &$param) {
-        $stmt->bindParam($key, $param);
-      }
-    }
-    $stmt->execute();
+    $stmt->execute($params);
     return $stmt;
-  }
+}
 
   // ************************************************************ --  GETTERS  --***************************************************************************//
   public function get_club_info($club_id) {
@@ -60,12 +55,11 @@ class ClubModel{
     return $row ? $row['password'] : null;
   }
 
-  public function get_club_id($username){
-    $query = "SELECT club_id FROM club WHERE username = :username";
-    $stmt = $this->result_query($query, [':username' => $username]);
-    $row = $stmt->fetch(PDO::FETCH_ASSOC);
-    return $row ? $row['club_id'] : null;
-  }
+ public function get_club_id($username){
+  $stmt = $this->result_query("SELECT club_id FROM club WHERE username =?",[$username]);
+  $club=$stmt ->fetch(PDO::FETCH_ASSOC);
+  return $club ? $club ['club_id']:null;
+ }
 
   public function get_club_desc($club_id){
     $query = "SELECT club_desc FROM club WHERE club_id = :club_id";
@@ -107,24 +101,16 @@ class ClubModel{
 
   // ************************************************************ --  AUTHENTIFICATION  --***************************************************************************//
 
-  public function login($username, $password){
-    $club_id = $this->get_club_id($username);
+  public function login($username,$password){
+    $stmt = $this->result_query("SELECT club_id , password FROM club WHERE username = ?",[$username]);
+    $result = $stmt->fetch(PDO ::FETCH_ASSOC);
 
-    if ($club_id !== null) {
-      $db_password = $this->get_club_password($club_id);
-    
-      if ($db_password !== null && password_verify($password, $db_password)) {
-        return true;
-      }
+    if ($result && password_verify($password,$result['password'])){
+      return true;
     }
-    return false;
-    /*$stmt = $this->result_query("SELECT club_id, password FROM clubs WHERE username = ?", [$username]);
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($result && password_verify($password, $result['password'])) {
-            return true;
-        }
-        return false;*/
+    return false;
+    
   }
 
   // ************************************************************ --  ENABLE MODIFICATION  --***************************************************************************//
