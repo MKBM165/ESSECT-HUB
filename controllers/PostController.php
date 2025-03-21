@@ -18,9 +18,8 @@ class PostController {
     }
 
     public function create_post() {
-        $user_id = $_SESSION['user_id'];
-        // $club_id = $_SESSION['club_id'] ?? null;
-        $club_id = $_POST['club_id'] ?? null;
+        $club_id = $_SESSION['club_id'] ?? null;
+        // $club_id = $_POST['club_id'] ?? null;
         $caption = $_POST['caption'] ?? null;
         $image = $_POST['image'] ?? null;
 
@@ -50,7 +49,7 @@ class PostController {
     }
 
     public function get_club_posts() {
-        $club_id = $_POST['club_id'] ?? null;
+        $club_id = $_SESSION['club_id'] ?? null;
 
         if ($club_id) {
             $posts = $this->postModel->get_club_posts($club_id);

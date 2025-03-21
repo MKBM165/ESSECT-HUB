@@ -59,6 +59,7 @@ const SendRequest = function (clubId) {
       console.log(data);
       if (data.success) {
         console.log("✅ Request sent successfully:", data.message);
+        alert("✅ Request sent successfully");
       } else {
         console.error("❌ Error:", data.error);
       }

@@ -52,7 +52,7 @@ class RequestModel{
   $query="UPDATE join_requests SET status = ?
           WHERE club_id =? 
           AND  user_id=?";
-  $this->result_query($query ,[$newStatus,$club_id,$user_id]);
+  return $this->result_query($query ,[$newStatus,$club_id,$user_id]);
  }
 }
 ?>

@@ -32,8 +32,8 @@ const getRequests = function () {
     },
     body: JSON.stringify({
       action: "get_club_requests",
-      club_id: clubId,
     }),
+    // club_id: clubId,
   })
     .then((response) => {
       // console.log(response.text());
@@ -50,7 +50,7 @@ const getRequests = function () {
     })
     .catch((error) => console.error("Fetch error:", error));
 };
-function updateNotifList(joinRequests) {
+function updateNotifList(joinRequests = []) {
   notifList.innerHTML = ""; // Clear the list
   notifCount.textContent = joinRequests.length; // Update badge count
 
@@ -62,6 +62,7 @@ function updateNotifList(joinRequests) {
 
   joinRequests.forEach((user) => {
     const li = document.createElement("li");
+    console.log(user);
     li.classList.add(
       "list-group-item",
       "d-flex",
@@ -70,7 +71,7 @@ function updateNotifList(joinRequests) {
     );
 
     li.innerHTML = `
-      <span>${user.name}</span>
+      <span>${user.username}</span>
       <div>
         <button class="btn btn-success btn-sm accept-btn" data-id="${user.id}">✔</button>
         <button class="btn btn-danger btn-sm reject-btn" data-id="${user.id}">✖</button>
@@ -84,20 +85,48 @@ function updateNotifList(joinRequests) {
 notifBtn.addEventListener("click", () => {
   notifBox.style.display = notifBox.style.display === "none" ? "block" : "none";
 });
+const manageRequest = function (userID, status) {
+  fetch("http://localhost/ESSECT-HUB/controllers/RequestController.php", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json", // Ensure JSON format
+    },
+    body: JSON.stringify({
+      action: "manage_request",
+      user_id: userID,
+      new_status: status,
+    }),
+    // club_id: clubId,
+  })
+    .then((response) => {
+      // console.log(response.text());
+      return response.json();
+    })
+    .then((data) => {
+      console.log(data);
+      if (data.success) {
+        updateNotifList();
 
+        console.log("✅ Request handled successfully:", data.message);
+      } else {
+        console.error("❌ Error:", data.error);
+      }
+    })
+    .catch((error) => console.error("Fetch error:", error));
+};
 // Handle accept/reject clicks
 notifList.addEventListener("click", (event) => {
   if (event.target.classList.contains("accept-btn")) {
     const userId = event.target.getAttribute("data-id");
-    joinRequests = joinRequests.filter((user) => user.id != userId);
-    updateNotifList();
+    // joinRequests = joinRequests.filter((user) => user.id != userId);
+    manageRequest(userId, "accepted");
     showToast(`User ${userId} accepted!`, "success");
   }
 
   if (event.target.classList.contains("reject-btn")) {
     const userId = event.target.getAttribute("data-id");
-    joinRequests = joinRequests.filter((user) => user.id != userId);
-    updateNotifList();
+    // joinRequests = joinRequests.filter((user) => user.id != userId);
+    manageRequest(userId, "rejected");
     showToast(`User ${userId} rejected.`, "danger");
   }
 });
@@ -114,7 +143,7 @@ let clubID;
 const postForm = document.getElementById("add-post-form");
 postForm.addEventListener("submit", (event) => {
   event.preventDefault();
-  const formData = new FormData(this);
+  const formData = new FormData(event.target);
   formData.append("action", "create_post");
 
   fetch("http://localhost/ESSECT-HUB/controllers/PostController.php", {
@@ -162,14 +191,15 @@ document.addEventListener("DOMContentLoaded", () => {
         // console.log(data.user);
         updateUIclub(data.club);
         clubID = data.club.club_id;
+        getRequests();
       } else {
         // window.location.href = "index.html";
         console.error("Error:", data.error);
       }
     })
     .catch((error) => {
-      window.location.href = "index.html";
       console.error("Error fetching profile:", error);
+      // window.location.href = "index.html";
     });
   // Sample users requesting to join (this should be fetched from the backend)
 
@@ -188,9 +218,9 @@ document.addEventListener("DOMContentLoaded", () => {
   }, 10000); // Every 10 seconds a new request appears*/
 
   // Initialize notification list
-  updateNotifList();
+  // updateNotifList();
 });
-const getClubPosts = function (clubId) {
+const getClubPosts = function () {
   fetch("http://localhost/ESSECT-HUB/controllers/PostController.php", {
     method: "POST",
     headers: {
@@ -198,8 +228,8 @@ const getClubPosts = function (clubId) {
     },
     body: JSON.stringify({
       action: "get_club_posts",
-      club_id: clubId,
     }),
+    // club_id: clubId,
   })
     .then((response) => {
       // console.log(response.text());
@@ -284,5 +314,5 @@ const updatePostsUI = function (posts) {
   const postsContainer = document.getElementById("posts-container");
   postsContainersContainer.innerHTML = "";
   posts.forEach(addPostCard);
+  // showToast("Post created successfully!", "success");
 };
-showToast("Post created successfully!", "success");

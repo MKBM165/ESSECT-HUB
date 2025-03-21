@@ -33,7 +33,8 @@ public function get_user_requests(){
 
 
 public function get_club_requests(){
-  $club_id=$_POST['club_id']??null;
+  // $club_id=$_POST['club_id']??null;
+  $club_id=$_SESSION['club_id'];
 
   if(!$club_id){
    echo json_encode(['error' => 'no club id found']);
@@ -76,7 +77,7 @@ public function get_club_requests(){
 
 public function manage_request(){
   $user_id = $_POST['user_id'] ?? null;
-  $club_id = $_POST['club_id'] ?? null;
+  $club_id = $_SESSION['club_id'] ?? null;
   $new_status = $_POST['new_status'] ??null;
 
   if(!$user_id || !$club_id || !$new_status){
@@ -97,7 +98,7 @@ public function manage_request(){
     echo json_encode(['success' => true , 'message' => 'request status has been updated']);
   }
   else{
-    echo json_encode(['error' => 'failed to update the request status']);
+    echo json_encode(['error' => $updated]);
   }
  exit;
 }

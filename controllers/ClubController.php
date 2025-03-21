@@ -2,7 +2,6 @@
 session_start();
 include('../models/DBconnection.php');
 include('../models/ClubModel.php');
-
 header('Content-Type: application/json');
 
 class ClubController {
@@ -16,6 +15,8 @@ class ClubController {
         $password = $_POST['password'] ?? null;
 
         if ($username && $password) {
+            // echo json_encode(['message' => $this->clubModel->login($username, $password)]);
+            // exit;
             if ($this->clubModel->login($username, $password)) {
                 $_SESSION['username'] = $username;
                 $_SESSION['club_id'] = $this->clubModel->get_club_id($username);
@@ -68,11 +69,6 @@ class ClubController {
     }
 
     public function create_club() {
-        if (!isset($_SESSION['username'])) {
-            echo json_encode(['error' => 'User not logged in']);
-            exit;
-        }
-
         $nom = $_POST['nom'] ?? null;
         $username = $_POST['username'] ?? null;
         $club_desc = $_POST['club_desc'] ?? null;
@@ -84,11 +80,14 @@ class ClubController {
             exit;
         }
 
-        $image_path = '/ESSECT-HUB/assets/uploads/' . basename($_FILES['club_image']['name']);
+        $image_path = $_SERVER['DOCUMENT_ROOT'] . '/ESSECT-HUB/assets/uploads/' . basename($_FILES['club_image']['name']);
+
         move_uploaded_file($_FILES['club_image']['tmp_name'], $image_path);
+        $image_url = '/ESSECT-HUB/assets/uploads/' . basename($_FILES['club_image']['name']);
+
 
         if ($nom && $username && $club_desc && $password && $email) {
-            if ($this->clubModel->create_club($nom, $username, $club_desc, $image_path, $password, $email)) {
+            if ($this->clubModel->create_club($nom, $username, $club_desc, $image_url, $password, $email)) {
                 echo json_encode(['success' => true, 'message' => 'Club Created successfully']);
             } else {
                 echo json_encode(['error' => 'Club creation failed']);
@@ -96,6 +95,8 @@ class ClubController {
         } else {
             echo json_encode(['error' => 'Please fill in all fields']);
         }
+        exit;
+
     }
 
     public function delete_club() {
@@ -128,7 +129,7 @@ class ClubController {
     public function get_club_info() {
         
         $club_id = $_SESSION['club_id'] ?? null;
-        $club = $this->clubModel->get_club_info();
+        $club = $this->clubModel->get_club_info($club_id);
         if (!$club_id) {
             
             echo json_encode(['error' => 'Club not found in Session']);

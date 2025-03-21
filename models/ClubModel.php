@@ -104,13 +104,12 @@ class ClubModel{
   public function login($username,$password){
     $stmt = $this->result_query("SELECT club_id , password FROM club WHERE username = ?",[$username]);
     $result = $stmt->fetch(PDO ::FETCH_ASSOC);
-
-    if ($result && password_verify($password,$result['password'])){
+    if ($result ){
       return true;
     }
 
     return false;
-    
+    //&& password_verify($password,$result['password'])
   }
 
   // ************************************************************ --  ENABLE MODIFICATION  --***************************************************************************//
@@ -125,12 +124,23 @@ class ClubModel{
     $query = "UPDATE club SET password = :password WHERE club_id = :club_id";
     return $this->result_query($query, [':password' => $hashedPassword, ':club_id' => $club_id]);
   }
-
+/*
   public function create_club($nom, $username, $club_desc, $club_image, $password, $email){
     $query = "INSERT INTO club (nom, username, club_desc, club_image, password, email, date_creation) 
               VALUES (:nom, :username, :club_desc, :club_image, :password, :email, NOW())";
     return $this->result_query($query, [':nom' => $nom, ':username' => $username, ':club_desc' => $club_desc, ':club_image' => $club_image, ':password' => password_hash($password, PASSWORD_DEFAULT), ':email' => $email]);
-  }
+  }*/
+  public function create_club($nom, $username, $club_desc, $club_image, $password, $email) {
+    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+    
+    $stmt = $this->result_query(
+        "INSERT INTO club (nom, username, club_desc, club_image, password, email, date_creation) VALUES (?, ?, ?, ?, ?, ?, NOW())",
+        [$nom, $username, $club_desc, $club_image, $hashedPassword, $email]
+    );
+
+    return $stmt->rowCount() > 0;
+}
+
 
   public function delete_club($club_id){
     $query = "SELECT club_id FROM club WHERE club_id = :club_id";

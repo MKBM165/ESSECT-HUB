@@ -147,20 +147,22 @@ createClubForm.addEventListener("submit", function (e) {
     body: formData,
   })
     .then((response) => {
-      if (!response.ok) {
-        throw new Error("Server error, status code: " + response.status);
-      }
-      // console.log(response.text());
-      return response.json();
+      return response.text();
+      // return response.json();
     })
-    .then((data) => {
-      // console.log(data);
-      if (data.success) {
-        console.log("✅ created successfully:", data.message);
-
-        getclubs();
-      } else {
-        alert("Creation Failed: " + (data.error || "Error creating account."));
+    .then((text) => {
+      console.log("Raw response:", text); // Debug raw output
+      try {
+        const data = JSON.parse(text); // Attempt JSON parse
+        if (data.success) {
+          console.log("✅ Created successfully");
+          getclubs();
+        } else {
+          alert("Error: " + (data.error || "Unknown error"));
+        }
+      } catch (e) {
+        console.error("Invalid JSON:", text);
+        alert("Server returned invalid JSON");
       }
     })
     .catch((error) => {
